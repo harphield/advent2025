@@ -14,10 +14,9 @@ func main() {
 	ranges := strings.SplitSeq(rows[0], ",")
 
 	sum := 0
+	sum2 := 0
 
 	for r := range ranges {
-		fmt.Println(r)
-
 		limits := strings.Split(r, "-")
 		start, err := strconv.ParseInt(limits[0], 10, 64)
 
@@ -36,7 +35,34 @@ func main() {
 
 			length := len(num_str)
 
-			// we don't care about strings with an odd length
+			// part 2: repeating pattern search
+		MAIN:
+			for pattern_length := 1; pattern_length <= length/2; pattern_length++ {
+				pattern := num_str[0:pattern_length]
+
+				next := pattern_length
+
+				for {
+					if num_str[next:next+pattern_length] != pattern {
+						continue MAIN
+					}
+
+					next += pattern_length
+					if next == length {
+						break
+					}
+
+					if next > length || next+pattern_length > length {
+						continue MAIN
+					}
+				}
+
+				// found an invalid ID
+				sum2 += int(i)
+				break
+			}
+
+			// we don't care about strings with an odd length for part 1
 			if length%2 != 0 {
 				continue
 			}
@@ -47,5 +73,6 @@ func main() {
 		}
 	}
 
-	fmt.Println("RESULT: ", sum)
+	fmt.Println("RESULT PART 1: ", sum)
+	fmt.Println("RESULT PART 2: ", sum2)
 }
