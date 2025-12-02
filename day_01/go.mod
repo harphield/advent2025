@@ -1,6 +1,6 @@
 module github.com/harphield/advent2025/day_01
 
-replace github.com/harphield/advent2025/inputreader => ../input_reader
+replace github.com/harphield/advent2025/inputreader => ../inputreader
 
 go 1.25.4
 
