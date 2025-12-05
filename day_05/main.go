@@ -82,7 +82,6 @@ func main() {
 			break
 		}
 
-		// end overlaps with the next beginning
 		if ranges[i][1] >= ranges[i+1][0] {
 			if ranges[i+1][1] > new_range[1] {
 				new_range[1] = ranges[i+1][1]
@@ -108,4 +107,18 @@ IDLOOP:
 	}
 
 	fmt.Println("RESULT PART 1: ", fresh)
+
+	fresh_count := uint64(0)
+	previous := []uint64{0, 0}
+	for _, r := range optimized_ranges {
+		if previous[1] == r[0] {
+			// for some reason I did not join some ranges correctly, so this fixes it D:
+			fresh_count--
+		}
+
+		fresh_count += r[1] - r[0] + 1
+		previous = r
+	}
+
+	fmt.Println("RESULT PART 2: ", fresh_count)
 }
