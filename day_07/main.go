@@ -6,11 +6,6 @@ import (
 	"github.com/harphield/advent2025/inputreader"
 )
 
-type splitter struct {
-	x int
-	y int
-}
-
 const EMPTY = 0
 const START = 1
 const SPLITTER = 2
@@ -45,7 +40,7 @@ func main() {
 				hitmap[y] = append(hitmap[y], SPLITTER)
 				// check if a ray is coming in from above
 				if hitmap[y-1][x] == BEAM {
-					if x > 0 {
+					if x > 0 && hitmap[y][x-1] == EMPTY {
 						hitmap[y][x-1] = BEAM
 					}
 
@@ -68,7 +63,9 @@ func main() {
 		x = 0
 	}
 
-	fmt.Println(hitmap)
+	for _, row := range hitmap {
+		fmt.Println(row)
+	}
 
 	fmt.Println("RESULT PART 1: ", splitters)
 }
