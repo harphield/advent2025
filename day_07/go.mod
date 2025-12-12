@@ -1,4 +1,4 @@
-module github.com/harphield/advent2025/day_06
+module github.com/harphield/advent2025/day_07
 
 replace github.com/harphield/advent2025/inputreader => ../inputreader
 
