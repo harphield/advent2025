@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"slices"
@@ -146,4 +147,64 @@ func main() {
 	}
 
 	fmt.Println("RESULT PART 1: ", result)
+
+	// part 2: recursive connecting?
+	big_circuit := []int{distances[0].id_1}
+	p2_distances := make([]distance, 0)
+
+	for {
+		new_circuit, new_distances, err := connect(big_circuit, p2_distances, junctions)
+		if err == nil {
+			break
+		}
+
+		big_circuit = new_circuit
+		p2_distances = new_distances
+	}
+
+	fmt.Println("RESULT PART 2: ", junctions[p2_distances[len(p2_distances)-1].id_1].x*junctions[p2_distances[len(p2_distances)-1].id_2].x)
+}
+
+func connect(circuit []int, distances []distance, junctions []coords) ([]int, []distance, error) {
+	min := 0.0
+	closest_from := 0
+	closest_index := 0
+
+	for _, index := range circuit {
+		// find the closest other coordinate
+		for i, c := range junctions {
+			if i == index || slices.Contains(circuit, i) {
+				continue
+			}
+
+			dis := find_distance(c, junctions[index])
+			if min == 0 || dis < min {
+				min = dis
+				closest_from = index
+				closest_index = i
+			}
+		}
+	}
+
+	// didn't find any more
+	if min == 0.0 {
+		return circuit, distances, nil
+	}
+
+	circuit = append(circuit, closest_index)
+	distances = append(distances, distance{
+		id_1:     closest_from,
+		id_2:     closest_index,
+		distance: min,
+	})
+
+	return circuit, distances, errors.New("not finished yet")
+}
+
+func find_distance(c, c2 coords) float64 {
+	return math.Sqrt(
+		math.Pow(float64(c.x)-float64(c2.x), 2) +
+			math.Pow(float64(c.y)-float64(c2.y), 2) +
+			math.Pow(float64(c.z)-float64(c2.z), 2),
+	)
 }
